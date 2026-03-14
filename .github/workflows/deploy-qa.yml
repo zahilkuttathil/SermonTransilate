@@ -1,4 +1,4 @@
-name: Deploy — QA (sermon-qa)
+name: Deploy — QA (qa-sermon.dailymanna.life)
 
 on:
   push:
@@ -13,7 +13,7 @@ jobs:
   build_and_deploy_job:
     if: github.event_name == 'push' || (github.event_name == 'pull_request' && github.event.action != 'closed')
     runs-on: ubuntu-latest
-    name: Build and Deploy to QA
+    name: Build and Deploy to qa-sermon.dailymanna.life
     steps:
       - uses: actions/checkout@v4
         with:
