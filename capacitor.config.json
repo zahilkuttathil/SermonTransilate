@@ -1,0 +1,22 @@
+{
+  "appId": "life.dailymanna.sermon",
+  "appName": "Sermon Listen",
+  "webDir": "public",
+  "server": {
+    "androidScheme": "https"
+  },
+  "ios": {
+    "contentInset": "automatic",
+    "backgroundColor": "#000000",
+    "scheme": "sermon"
+  },
+  "android": {
+    "backgroundColor": "#000000"
+  },
+  "plugins": {
+    "SplashScreen": {
+      "launchAutoHide": true,
+      "backgroundColor": "#000000"
+    }
+  }
+}

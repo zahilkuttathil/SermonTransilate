@@ -1,0 +1,13 @@
+{
+  "IsEncrypted": false,
+  "Values": {
+    "AzureWebJobsStorage": "UseDevelopmentStorage=true",
+    "FUNCTIONS_WORKER_RUNTIME": "node",
+
+    "SPEECH_KEY":    "<your-azure-speech-subscription-key>",
+    "SPEECH_REGION": "<your-azure-region, e.g. eastus>",
+
+    "TRANSLATOR_KEY":    "<your-azure-translator-subscription-key>",
+    "TRANSLATOR_REGION": "<your-azure-region, e.g. eastus>"
+  }
+}

@@ -1,0 +1,31 @@
+# Dependencies
+node_modules/
+api/node_modules/
+
+# Capacitor native platforms (generated — never commit)
+ios/
+android/
+
+# Capacitor build
+.capacitor/
+
+# Environment / secrets
+api/local.settings.json
+.env
+.env.local
+.env.*.local
+
+# OS
+.DS_Store
+Thumbs.db
+
+# Editor
+.vscode/settings.json
+.idea/
+
+# Logs
+npm-debug.log*
+*.log
+
+# SWA CLI
+.swa/

@@ -1,0 +1,427 @@
+<mxfile host="app.diagrams.net" modified="2026-03-13T00:00:00.000Z" agent="GitHub Copilot" version="21.0.0" type="device">
+  <diagram name="PreachListen Architecture" id="preachlisten-arch">
+    <mxGraphModel dx="1422" dy="762" grid="1" gridSize="10" guides="1" tooltips="1" connect="1" arrows="1" fold="1" page="1" pageScale="1" pageWidth="1654" pageHeight="1169" math="0" shadow="1">
+      <root>
+        <mxCell id="0" />
+        <mxCell id="1" parent="0" />
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- BACKGROUND SWIM LANES                               -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- User Device Zone -->
+        <mxCell id="zone-device" value="User Device (Mobile Browser)" style="swimlane;startSize=30;fillColor=#dae8fc;strokeColor=#6c8ebf;fontStyle=1;fontSize=13;fontColor=#003366;rounded=1;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="30" y="60" width="380" height="480" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Zone -->
+        <mxCell id="zone-azure" value="Microsoft Azure" style="swimlane;startSize=30;fillColor=#f0f4ff;strokeColor=#0078D4;fontStyle=1;fontSize=13;fontColor=#0078D4;rounded=1;arcSize=3;" vertex="1" parent="1">
+          <mxGeometry x="460" y="60" width="1160" height="940" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — Hosting Sub-zone -->
+        <mxCell id="zone-hosting" value="Hosting &amp; Delivery" style="swimlane;startSize=25;fillColor=#e6f3ff;strokeColor=#0078D4;fontStyle=0;fontSize=11;fontColor=#0078D4;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="20" y="50" width="260" height="160" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — API Gateway Sub-zone -->
+        <mxCell id="zone-functions" value="API Gateway (Serverless)" style="swimlane;startSize=25;fillColor=#fff4e6;strokeColor=#F7630C;fontStyle=0;fontSize=11;fontColor=#d04d00;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="20" y="250" width="260" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — AI Services Sub-zone -->
+        <mxCell id="zone-ai" value="Azure AI Services" style="swimlane;startSize=25;fillColor=#f3eaff;strokeColor=#7719AA;fontStyle=0;fontSize=11;fontColor=#5c0d8e;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="340" y="50" width="500" height="380" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — Security Sub-zone -->
+        <mxCell id="zone-security" value="Security" style="swimlane;startSize=25;fillColor=#fff0f0;strokeColor=#D13438;fontStyle=0;fontSize=11;fontColor=#a4262c;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="20" y="480" width="260" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — Observability Sub-zone -->
+        <mxCell id="zone-obs" value="Observability" style="swimlane;startSize=25;fillColor=#e8f5e9;strokeColor=#107C10;fontStyle=0;fontSize=11;fontColor=#004b00;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="340" y="480" width="500" height="180" as="geometry" />
+        </mxCell>
+
+        <!-- Azure — CI/CD Sub-zone -->
+        <mxCell id="zone-cicd" value="CI/CD Pipeline" style="swimlane;startSize=25;fillColor=#f5f5f5;strokeColor=#555555;fontStyle=0;fontSize=11;fontColor=#333;rounded=1;arcSize=3;dashed=1;" vertex="1" parent="zone-azure">
+          <mxGeometry x="900" y="50" width="240" height="810" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- CLIENT-SIDE COMPONENTS (inside zone-device)        -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- PWA App -->
+        <mxCell id="pwa" value="PWA Frontend&#xa;(Vanilla JS + CSS)" style="shape=mxgraph.azure2.mobile_app;fillColor=#0078D4;strokeColor=#005A9E;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="140" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Microphone / Audio Capture -->
+        <mxCell id="mic" value="Microphone&#xa;(Web Audio API)" style="shape=mxgraph.cisco.computers_and_peripherals.microphone;fillColor=#6d8764;strokeColor=#3A5431;fontColor=#3A5431;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="40" y="50" width="60" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Speech SDK in Browser -->
+        <mxCell id="speech-sdk" value="Azure Speech SDK&#xa;(Browser / WSS)" style="shape=mxgraph.azure2.cognitive_services;fillColor=#7719AA;strokeColor=#5c0d8e;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="260" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- IndexedDB -->
+        <mxCell id="indexeddb" value="IndexedDB&#xa;(Dexie.js)&#xa;Transcript + Translation&#xa;Cache" style="shape=mxgraph.azure2.storage;fillColor=#005A9E;strokeColor=#003a6b;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="40" y="210" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Virtual Scroller -->
+        <mxCell id="vscroll" value="Virtual Scroll&#xa;Engine&#xa;(IntersectionObserver&#xa;max 8 DOM nodes)" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#003366;fontSize=10;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="150" y="220" width="160" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- Token Cache -->
+        <mxCell id="token-cache" value="Token Cache&#xa;(sessionStorage&#xa;10-min STS token)" style="rounded=1;whiteSpace=wrap;fillColor=#dae8fc;strokeColor=#6c8ebf;fontColor=#003366;fontSize=10;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="150" y="300" width="160" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Service Worker -->
+        <mxCell id="sw" value="Service Worker&#xa;(PWA Offline Cache)" style="shape=mxgraph.azure2.app_service;fillColor=#0078D4;strokeColor=#005A9E;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="40" y="340" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Dual Pane UI -->
+        <mxCell id="dualpane" value="Dual-Pane UI&#xa;&#xa;[Transcript Pane]  |  [Translation Pane]&#xa;Auto-scroll / Manual scroll&#xa;Language badge per segment" style="rounded=1;whiteSpace=wrap;fillColor=#003366;strokeColor=#001a4d;fontColor=#ffffff;fontSize=10;align=center;" vertex="1" parent="zone-device">
+          <mxGeometry x="40" y="420" width="295" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AZURE — HOSTING                                     -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- Static Web Apps -->
+        <mxCell id="swa" value="Azure Static Web Apps&#xa;(Standard Plan)" style="shape=mxgraph.azure2.static_apps;fillColor=#0078D4;strokeColor=#005A9E;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-hosting">
+          <mxGeometry x="30" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Azure CDN -->
+        <mxCell id="cdn" value="Azure CDN&#xa;(Global Edge)" style="shape=mxgraph.azure2.cdn_profiles;fillColor=#0050A0;strokeColor=#003070;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-hosting">
+          <mxGeometry x="150" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AZURE — FUNCTIONS                                   -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- Azure Functions -->
+        <mxCell id="functions" value="Azure Functions v4&#xa;(Consumption Plan&#xa;Node.js 20)" style="shape=mxgraph.azure2.azure_functions;fillColor=#F7630C;strokeColor=#c44e00;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-functions">
+          <mxGeometry x="30" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Token endpoint label -->
+        <mxCell id="fn-token-label" value="GET /api/speech-token" style="text;fontSize=9;fontColor=#d04d00;align=left;" vertex="1" parent="zone-functions">
+          <mxGeometry x="130" y="60" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Translate endpoint label -->
+        <mxCell id="fn-translate-label" value="POST /api/translate" style="text;fontSize=9;fontColor=#d04d00;align=left;" vertex="1" parent="zone-functions">
+          <mxGeometry x="130" y="85" width="120" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- Managed Identity label -->
+        <mxCell id="fn-mi-label" value="System-assigned&#xa;Managed Identity" style="text;fontSize=9;fontColor=#d04d00;align=left;" vertex="1" parent="zone-functions">
+          <mxGeometry x="130" y="110" width="120" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AZURE — AI SERVICES                                 -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- Azure Speech Service -->
+        <mxCell id="speech-svc" value="Azure Speech Service&#xa;(S0 Standard)" style="shape=mxgraph.azure2.speech_services;fillColor=#7719AA;strokeColor=#5c0d8e;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-ai">
+          <mxGeometry x="60" y="60" width="90" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Speech detail box -->
+        <mxCell id="speech-detail" value="• Real-time STT&#xa;• Auto Language Detection (LID)&#xa;• Open-set (150+ languages)&#xa;• WebSocket streaming&#xa;• Interim + Final results&#xa;• Word timestamps" style="rounded=1;whiteSpace=wrap;fillColor=#f3eaff;strokeColor=#7719AA;fontColor=#3d006b;fontSize=9;align=left;" vertex="1" parent="zone-ai">
+          <mxGeometry x="170" y="55" width="190" height="100" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Translator -->
+        <mxCell id="translator" value="Azure Translator&#xa;(S1 Standard)" style="shape=mxgraph.azure2.translator_text;fillColor=#5C2D91;strokeColor=#3b1263;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-ai">
+          <mxGeometry x="60" y="220" width="90" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Translator detail box -->
+        <mxCell id="trans-detail" value="• 135 languages supported&#xa;• Batch text translation&#xa;• Input capped at 5,000 chars&#xa;  per segment&#xa;• Results cached in IndexedDB" style="rounded=1;whiteSpace=wrap;fillColor=#f3eaff;strokeColor=#5C2D91;fontColor=#3b1263;fontSize=9;align=left;" vertex="1" parent="zone-ai">
+          <mxGeometry x="170" y="215" width="190" height="90" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Speech STS -->
+        <mxCell id="speech-sts" value="Speech STS&#xa;Token Service" style="rounded=1;whiteSpace=wrap;fillColor=#7719AA;strokeColor=#5c0d8e;fontColor=#ffffff;fontSize=9;align=center;" vertex="1" parent="zone-ai">
+          <mxGeometry x="380" y="110" width="100" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- STS detail -->
+        <mxCell id="sts-detail" value="10-min token&#xa;auto-refreshed 1 min before expiry" style="text;fontSize=9;fontColor=#5c0d8e;align=left;" vertex="1" parent="zone-ai">
+          <mxGeometry x="380" y="155" width="140" height="30" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AZURE — SECURITY                                    -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- Key Vault -->
+        <mxCell id="keyvault" value="Azure Key Vault" style="shape=mxgraph.azure2.key_vault;fillColor=#D13438;strokeColor=#a4262c;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-security">
+          <mxGeometry x="30" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- KV Secrets list -->
+        <mxCell id="kv-detail" value="Secrets:&#xa;• speech-subscription-key&#xa;• speech-region&#xa;• translator-subscription-key" style="rounded=1;whiteSpace=wrap;fillColor=#fff0f0;strokeColor=#D13438;fontColor=#a4262c;fontSize=9;align=left;" vertex="1" parent="zone-security">
+          <mxGeometry x="130" y="50" width="115" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- AZURE — OBSERVABILITY                               -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- App Insights -->
+        <mxCell id="appinsights" value="Azure Application&#xa;Insights" style="shape=mxgraph.azure2.application_insights;fillColor=#107C10;strokeColor=#004b00;fontColor=#ffffff;fontStyle=1;fontSize=11;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-obs">
+          <mxGeometry x="30" y="50" width="80" height="80" as="geometry" />
+        </mxCell>
+
+        <!-- Insights detail -->
+        <mxCell id="insights-detail" value="• Client-side JS telemetry&#xa;• Function invocation metrics&#xa;• Translation latency tracking&#xa;• PII-stripped (no transcript text)" style="rounded=1;whiteSpace=wrap;fillColor=#e8f5e9;strokeColor=#107C10;fontColor=#004b00;fontSize=9;align=left;" vertex="1" parent="zone-obs">
+          <mxGeometry x="130" y="50" width="180" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- Azure Monitor -->
+        <mxCell id="azmonitor" value="Azure Monitor" style="shape=mxgraph.azure2.monitor;fillColor=#107C10;strokeColor=#004b00;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-obs">
+          <mxGeometry x="370" y="50" width="60" height="60" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- CI/CD PIPELINE                                      -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- GitHub -->
+        <mxCell id="github" value="GitHub Repository&#xa;(Source Control)" style="shape=mxgraph.veeam2.github;fillColor=#24292e;strokeColor=#000000;fontColor=#ffffff;fontStyle=0;fontSize=10;labelPosition=center;verticalLabelPosition=bottom;verticalAlign=top;align=center;" vertex="1" parent="zone-cicd">
+          <mxGeometry x="80" y="40" width="70" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- GitHub Actions -->
+        <mxCell id="gh-actions" value="GitHub Actions&#xa;(CI/CD Pipeline)" style="rounded=1;whiteSpace=wrap;fillColor=#24292e;strokeColor=#000000;fontColor=#ffffff;fontSize=10;align=center;" vertex="1" parent="zone-cicd">
+          <mxGeometry x="60" y="160" width="120" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Deployment steps -->
+        <mxCell id="deploy-steps" value="1. Minify JS/CSS&#xa;2. Build PWA assets&#xa;3. Deploy to SWA&#xa;4. Deploy Functions" style="rounded=1;whiteSpace=wrap;fillColor=#f5f5f5;strokeColor=#555555;fontColor=#333;fontSize=9;align=left;" vertex="1" parent="zone-cicd">
+          <mxGeometry x="35" y="240" width="170" height="70" as="geometry" />
+        </mxCell>
+
+        <!-- azd CLI label -->
+        <mxCell id="azd-label" value="Azure Developer CLI&#xa;(azd up / azd deploy)" style="rounded=1;whiteSpace=wrap;fillColor=#0078D4;strokeColor=#005A9E;fontColor=#ffffff;fontSize=9;align=center;" vertex="1" parent="zone-cicd">
+          <mxGeometry x="50" y="340" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- Bicep IaC -->
+        <mxCell id="bicep" value="Bicep / ARM Templates&#xa;(Infrastructure as Code)" style="rounded=1;whiteSpace=wrap;fillColor=#f0f4ff;strokeColor=#0078D4;fontColor=#0078D4;fontSize=9;align=center;" vertex="1" parent="zone-cicd">
+          <mxGeometry x="50" y="420" width="140" height="50" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- MEMORY MANAGEMENT LEGEND BOX                        -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="mem-legend" value="Memory Management Strategy&#xa;&#xa;✔ Max 8 DOM nodes rendered (VirtualScroller)&#xa;✔ All finalized text stored in IndexedDB only&#xa;✔ Audio buffers discarded after SDK processes&#xa;✔ Translation results cached in IndexedDB&#xa;✔ Old sessions auto-pruned (&gt;30 days)&#xa;✔ ~1 MB / 1hr sermon in IndexedDB" style="rounded=1;whiteSpace=wrap;fillColor=#fffde7;strokeColor=#f9a825;fontColor=#333;fontSize=10;align=left;" vertex="1" parent="zone-azure">
+          <mxGeometry x="870" y="480" width="260" height="150" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- LEGEND                                              -->
+        <!-- ═══════════════════════════════════════════════════ -->
+        <mxCell id="legend-title" value="Legend" style="text;fontStyle=1;fontSize=11;fontColor=#333;" vertex="1" parent="1">
+          <mxGeometry x="30" y="590" width="380" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1" value="──────" style="text;fontColor=#0078D4;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="612" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg1-txt" value="HTTPS Request" style="text;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="612" width="100" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2" value="- - - - -" style="text;fontColor=#7719AA;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="200" y="612" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg2-txt" value="WebSocket (WSS)" style="text;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="265" y="612" width="120" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3" value="══════" style="text;fontColor=#D13438;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="30" y="635" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg3-txt" value="Managed Identity (RBAC)" style="text;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="95" y="635" width="150" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4" value="·········" style="text;fontColor=#107C10;fontSize=12;" vertex="1" parent="1">
+          <mxGeometry x="250" y="635" width="60" height="20" as="geometry" />
+        </mxCell>
+        <mxCell id="leg4-txt" value="Telemetry" style="text;fontSize=10;" vertex="1" parent="1">
+          <mxGeometry x="315" y="635" width="80" height="20" as="geometry" />
+        </mxCell>
+
+        <!-- ═══════════════════════════════════════════════════ -->
+        <!-- CONNECTIONS / ARROWS                                -->
+        <!-- ═══════════════════════════════════════════════════ -->
+
+        <!-- Mic → PWA -->
+        <mxCell id="e1" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#6d8764;strokeWidth=2;" edge="1" source="mic" target="pwa" parent="zone-device">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA → Speech SDK -->
+        <mxCell id="e2" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#0078D4;strokeWidth=2;" edge="1" source="pwa" target="speech-sdk" parent="zone-device">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA ↔ IndexedDB -->
+        <mxCell id="e3" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#005A9E;strokeWidth=2;endArrow=block;startArrow=block;startFill=1;endFill=1;" edge="1" source="pwa" target="indexeddb" parent="zone-device">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- VirtualScroller ↔ IndexedDB -->
+        <mxCell id="e4" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#005A9E;strokeWidth=1;dashed=1;" edge="1" source="vscroll" target="indexeddb" parent="zone-device">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA ↔ DualPane -->
+        <mxCell id="e5" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#003366;strokeWidth=2;" edge="1" source="pwa" target="dualpane" parent="zone-device">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- User device → Azure CDN (HTTPS — load app) -->
+        <mxCell id="e6" value="HTTPS&#xa;(Load App)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0078D4;strokeWidth=2;fontColor=#0078D4;fontSize=9;" edge="1" source="pwa" target="cdn" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="140" />
+              <mxPoint x="210" y="30" />
+              <mxPoint x="700" y="30" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- CDN → SWA -->
+        <mxCell id="e7" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#0078D4;strokeWidth=2;" edge="1" source="cdn" target="swa" parent="zone-hosting">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA → Azure Functions (GET token) -->
+        <mxCell id="e8" value="GET /api/speech-token&#xa;HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#F7630C;strokeWidth=2;fontColor=#F7630C;fontSize=9;" edge="1" source="pwa" target="functions" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="570" />
+              <mxPoint x="560" y="570" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- PWA → Azure Functions (POST translate) -->
+        <mxCell id="e9" value="POST /api/translate&#xa;HTTPS" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#F7630C;strokeWidth=2;fontColor=#F7630C;fontSize=9;dashed=1;" edge="1" source="pwa" target="functions" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="610" />
+              <mxPoint x="560" y="610" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Speech SDK (browser) → Speech Service WSS -->
+        <mxCell id="e10" value="WebSocket (WSS)&#xa;Real-time Audio Stream" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7719AA;strokeWidth=2;fontColor=#7719AA;fontSize=9;dashed=1;" edge="1" source="speech-sdk" target="speech-svc" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="370" y="130" />
+              <mxPoint x="370" y="30" />
+              <mxPoint x="860" y="30" />
+              <mxPoint x="860" y="125" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Functions → Key Vault (Managed Identity) -->
+        <mxCell id="e11" value="Managed Identity&#xa;(Secret Read)" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#D13438;strokeWidth=2;fontColor=#D13438;fontSize=9;" edge="1" source="functions" target="keyvault" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- Functions → Speech STS (exchange key for token) -->
+        <mxCell id="e12" value="Exchange key&#xa;for token" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#7719AA;strokeWidth=1;fontColor=#7719AA;fontSize=9;" edge="1" source="functions" target="speech-sts" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="360" />
+              <mxPoint x="590" y="220" />
+              <mxPoint x="900" y="220" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Functions → Translator -->
+        <mxCell id="e13" value="Translate text&#xa;HTTPS POST" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#5C2D91;strokeWidth=2;fontColor=#5C2D91;fontSize=9;" edge="1" source="functions" target="translator" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="590" y="420" />
+              <mxPoint x="590" y="480" />
+              <mxPoint x="840" y="480" />
+              <mxPoint x="840" y="380" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- SWA → Functions (integrated routing) -->
+        <mxCell id="e14" value="/api/* route" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#F7630C;strokeWidth=1;fontColor=#F7630C;fontSize=9;dashed=1;" edge="1" source="swa" target="functions" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- PWA / Functions → App Insights (telemetry) -->
+        <mxCell id="e15" value="Telemetry" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#107C10;strokeWidth=1;fontColor=#107C10;fontSize=9;dashed=1;" edge="1" source="pwa" target="appinsights" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="210" y="650" />
+              <mxPoint x="890" y="650" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Functions → App Insights -->
+        <mxCell id="e16" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#107C10;strokeWidth=1;dashed=1;" edge="1" source="functions" target="appinsights" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- App Insights → Azure Monitor -->
+        <mxCell id="e17" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#107C10;strokeWidth=1;" edge="1" source="appinsights" target="azmonitor" parent="1">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- GitHub → GitHub Actions -->
+        <mxCell id="e18" value="push to main" style="edgeStyle=orthogonalEdgeStyle;rounded=0;strokeColor=#24292e;strokeWidth=2;fontColor=#24292e;fontSize=9;" edge="1" source="github" target="gh-actions" parent="zone-cicd">
+          <mxGeometry relative="1" as="geometry" />
+        </mxCell>
+
+        <!-- GitHub Actions → SWA deploy -->
+        <mxCell id="e19" value="Deploy PWA" style="edgeStyle=orthogonalEdgeStyle;rounded=1;strokeColor=#0078D4;strokeWidth=2;fontColor=#0078D4;fontSize=9;" edge="1" source="gh-actions" target="swa" parent="1">
+          <mxGeometry relative="1" as="geometry">
+            <Array as="points">
+              <mxPoint x="1380" y="280" />
+              <mxPoint x="530" y="280" />
+              <mxPoint x="530" y="160" />
+            </Array>
+          </mxGeometry>
+        </mxCell>
+
+        <!-- Title -->
+        <mxCell id="title" value="PreachListen — Real-Time Preach Transcription &amp; Translation" style="text;fontStyle=1;fontSize=18;fontColor=#0078D4;align=center;" vertex="1" parent="1">
+          <mxGeometry x="300" y="10" width="860" height="40" as="geometry" />
+        </mxCell>
+
+        <!-- Subtitle -->
+        <mxCell id="subtitle" value="Azure Architecture Diagram | v1.0 | March 2026" style="text;fontStyle=2;fontSize=11;fontColor=#555;align=center;" vertex="1" parent="1">
+          <mxGeometry x="400" y="45" width="460" height="20" as="geometry" />
+        </mxCell>
+
+      </root>
+    </mxGraphModel>
+  </diagram>
+</mxfile>

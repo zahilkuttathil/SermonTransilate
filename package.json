@@ -1,0 +1,25 @@
+{
+  "name": "sermon-preachlisten",
+  "version": "1.0.0",
+  "description": "Real-time sermon transcription & translation — Daily Manna module",
+  "private": true,
+  "scripts": {
+    "dev": "npx serve public -l 3000",
+    "cap:sync": "npx cap sync",
+    "cap:build:ios": "npx cap sync ios && npx cap open ios",
+    "cap:build:android": "npx cap sync android && npx cap open android",
+    "cap:run:ios": "npx cap run ios",
+    "cap:run:android": "npx cap run android",
+    "cap:add:ios": "npx cap add ios",
+    "cap:add:android": "npx cap add android"
+  },
+  "dependencies": {
+    "@capacitor/android": "^6.0.0",
+    "@capacitor/core": "^6.0.0",
+    "@capacitor/ios": "^6.0.0"
+  },
+  "devDependencies": {
+    "@capacitor/cli": "^6.0.0",
+    "serve": "^14.2.0"
+  }
+}

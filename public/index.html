@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover" />
+  <meta name="theme-color" content="#2196F3" />
+  <meta name="mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="PreachListen" />
+  <meta name="description" content="Real-time preach transcription and translation powered by Azure AI" />
+  <title>PreachListen</title>
+
+  <link rel="manifest" href="/manifest.json" />
+  <link rel="icon" href="/icons/icon.svg" type="image/svg+xml" />
+  <link rel="stylesheet" href="/src/styles/main.css" />
+  <link rel="stylesheet" href="/src/styles/panes.css" />
+
+  <!-- Dexie.js UMD — sets window.Dexie -->
+  <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.js"></script>
+  <!-- Azure Cognitive Services Speech SDK (UMD — sets window.SpeechSDK) -->
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+</head>
+<body>
+  <div class="app-layout" id="app">
+
+    <!-- ══ TOP TOOLBAR ══════════════════════════════════════════ -->
+    <header class="toolbar" id="toolbar">
+      <div class="toolbar__left">
+        <svg class="toolbar__logo" viewBox="0 0 32 32" aria-hidden="true">
+          <circle cx="16" cy="16" r="16" fill="#2196F3"/>
+          <rect x="13" y="7" width="6" height="10" rx="3" fill="#fff"/>
+          <path d="M9 16a7 7 0 0 0 14 0" stroke="#fff" stroke-width="2" fill="none" stroke-linecap="round"/>
+          <line x1="16" y1="23" x2="16" y2="26" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+          <line x1="11" y1="26" x2="21" y2="26" stroke="#fff" stroke-width="2" stroke-linecap="round"/>
+        </svg>
+        <span class="toolbar__brand">PreachListen</span>
+      </div>
+      <div class="toolbar__center">
+        <span class="toolbar__lang-badge" id="detected-lang" title="Detected language" aria-live="polite"></span>
+        <span class="toolbar__status" id="status-indicator">
+          <span class="status-dot" id="status-dot" data-state="idle"></span>
+          <span id="status-text">Ready</span>
+        </span>
+      </div>
+      <div class="toolbar__right">
+        <button class="btn btn--icon" id="btn-history" title="Past sessions" aria-label="View past sessions">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="20" height="20">
+            <path d="M3 3v5h5"/><path d="M3.05 13A9 9 0 1 0 6 5.3L3 8"/>
+            <path d="M12 7v5l4 2"/>
+          </svg>
+        </button>
+      </div>
+    </header>
+
+    <!-- ══ ALERT BANNER ═════════════════════════════════════════ -->
+    <div class="banner banner--hidden" id="banner" role="alert" aria-live="assertive">
+      <span class="banner__icon" id="banner-icon">⚠</span>
+      <span id="banner-text"></span>
+      <button class="banner__close" id="banner-close" aria-label="Dismiss alert">✕</button>
+    </div>
+
+    <!-- ══ MAIN CONTENT AREA ════════════════════════════════════ -->
+    <main class="content-area" id="content-area">
+
+      <!-- Transcript Pane -->
+      <section class="pane pane--transcript" id="transcript-pane" aria-label="Transcript">
+        <div class="pane__header">
+          <svg class="pane__header-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <rect x="3" y="5" width="14" height="2" rx="1" fill="currentColor" opacity=".7"/>
+            <rect x="3" y="9" width="10" height="2" rx="1" fill="currentColor" opacity=".7"/>
+            <rect x="3" y="13" width="12" height="2" rx="1" fill="currentColor" opacity=".7"/>
+          </svg>
+          <span class="pane__title">Transcript</span>
+          <span class="pane__lang-label" id="transcript-lang-label" aria-live="polite"></span>
+        </div>
+        <div class="pane__body" id="transcript-scroll">
+          <div class="pane__empty" id="transcript-empty">
+            <svg class="pane__empty-icon" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+              <circle cx="40" cy="40" r="34" stroke="#2196F3" stroke-width="1.5" opacity="0.25"/>
+              <circle cx="40" cy="40" r="22" stroke="#2196F3" stroke-width="1.5" opacity="0.4"/>
+              <rect x="33" y="25" width="14" height="22" rx="7" stroke="#2196F3" stroke-width="2"/>
+              <path d="M26 40a14 14 0 0 0 28 0" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+              <line x1="40" y1="54" x2="40" y2="60" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+              <line x1="33" y1="60" x2="47" y2="60" stroke="#2196F3" stroke-width="2" stroke-linecap="round"/>
+            </svg>
+            <p class="pane__empty-title">Ready to Listen</p>
+            <p class="pane__empty-sub">Tap <strong>Record</strong> below to start.<br/>Any spoken language will be detected and<br/>transcribed automatically.</p>
+          </div>
+          <div class="vs-spacer vs-spacer--top" id="transcript-spacer-top"></div>
+          <div class="virtual-list" id="transcript-list"></div>
+          <div class="vs-spacer vs-spacer--bottom" id="transcript-spacer-bottom"></div>
+          <div class="interim-bar" id="interim-bar" aria-live="polite" aria-atomic="true"></div>
+        </div>
+      </section>
+
+      <!-- Translation Pane (collapsed until activated) -->
+      <section class="pane pane--translation pane--collapsed" id="translation-pane" aria-label="Translation" aria-hidden="true">
+        <div class="pane__header pane__header--translation">
+          <svg class="pane__header-icon" viewBox="0 0 20 20" fill="none" aria-hidden="true">
+            <path d="M4 6h6M7 4v2M4 6c0 3 2 5 4 5M8 6c-.5 2-2 4-4 4" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+            <path d="M11 14l3-7 3 7M12.5 11.5h3" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"/>
+          </svg>
+          <span class="pane__title">Translation</span>
+          <span class="pane__lang-label pane__lang-label--target" id="translation-lang-label" aria-live="polite"></span>
+          <button class="btn btn--icon pane__close" id="btn-close-translation" aria-label="Close translation pane">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="16" height="16">
+              <path d="M18 6L6 18M6 6l12 12"/>
+            </svg>
+          </button>
+        </div>
+        <div class="pane__body" id="translation-scroll">
+          <div class="pane__empty" id="translation-empty">
+            <p class="pane__empty-sub">Start recording, then select a language to see translation here.</p>
+          </div>
+          <div class="vs-spacer vs-spacer--top" id="translation-spacer-top"></div>
+          <div class="virtual-list" id="translation-list"></div>
+          <div class="vs-spacer vs-spacer--bottom" id="translation-spacer-bottom"></div>
+          <div class="translation-loading translation-loading--hidden" id="translation-loading">
+            <span class="spinner"></span><span>Translating…</span>
+          </div>
+        </div>
+      </section>
+
+    </main>
+
+    <!-- ══ BOTTOM CONTROLS ══════════════════════════════════════ -->
+    <footer class="controls" id="controls">
+      <div class="controls__row">
+
+        <!-- Language selector -->
+        <div class="controls__lang-wrap" id="lang-picker-wrap">
+          <button class="btn btn--lang" id="btn-lang" aria-haspopup="listbox" aria-expanded="false" aria-label="Select translation language">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+              <circle cx="12" cy="12" r="10"/>
+              <path d="M2 12h20M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/>
+            </svg>
+            <span id="lang-label">English</span>
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="12" height="12" aria-hidden="true">
+              <path d="M6 9l6 6 6-6"/>
+            </svg>
+          </button>
+          <div class="lang-dropdown lang-dropdown--hidden" id="lang-dropdown" role="listbox" aria-label="Select translation language" tabindex="-1"></div>
+        </div>
+
+        <!-- Record / Stop button (primary action) -->
+        <button class="btn btn--record" id="btn-record" aria-label="Start recording" data-state="idle">
+          <span class="btn-record__ring" aria-hidden="true"></span>
+          <span class="btn-record__inner" aria-hidden="true">
+            <svg class="icon-record" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+              <rect x="9" y="3" width="6" height="11" rx="3"/>
+              <path d="M5 10a7 7 0 0 0 14 0"/>
+              <line x1="12" y1="21" x2="12" y2="17"/>
+              <line x1="8" y1="21" x2="16" y2="21"/>
+            </svg>
+            <svg class="icon-stop icon-stop--hidden" viewBox="0 0 24 24" fill="currentColor">
+              <rect x="5" y="5" width="14" height="14" rx="2.5"/>
+            </svg>
+            <svg class="icon-loading icon-loading--hidden" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+              <path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/>
+            </svg>
+          </span>
+          <span class="btn-record__label" id="btn-record-label">Record</span>
+        </button>
+
+        <!-- Translate toggle -->
+        <button class="btn btn--translate" id="btn-translate" aria-label="Toggle translation" aria-pressed="false">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" width="16" height="16" aria-hidden="true">
+            <path d="M5 8l6 6"/><path d="M4 14s-1-1 0-2 5.5 1.5 6.5 2"/>
+            <path d="M12 3C7 3 3 7 3 12s4 9 9 9"/>
+            <path d="M21 21l-4.5-9L12 21"/><path d="M13.8 17.5h4.4"/>
+          </svg>
+          <span>Translate</span>
+        </button>
+
+      </div>
+    </footer>
+
+    <!-- Click-away overlay for lang dropdown (mobile) -->
+    <div class="overlay overlay--hidden" id="lang-overlay" aria-hidden="true"></div>
+  </div>
+
+  <!-- ══ SESSION HISTORY MODAL ════════════════════════════════ -->
+  <div class="modal-backdrop modal-backdrop--hidden" id="modal-backdrop" aria-hidden="true">
+    <div class="modal" id="history-modal" role="dialog" aria-modal="true" aria-labelledby="history-title">
+      <div class="modal__header">
+        <h2 class="modal__title" id="history-title">Past Sessions</h2>
+        <button class="btn btn--icon" id="btn-close-history" aria-label="Close history">
+          <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" width="18" height="18">
+            <path d="M18 6L6 18M6 6l12 12"/>
+          </svg>
+        </button>
+      </div>
+      <div class="modal__body" id="history-list">
+        <p class="modal__empty">No past sessions yet.</p>
+      </div>
+    </div>
+  </div>
+
+  <!-- App entry point (ES module — deferred, loaded after UMD scripts above) -->
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
