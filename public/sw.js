@@ -1,11 +1,10 @@
-// PreachListen Service Worker v1
-// Strategy: Network-first for API; Cache-first for static assets.
+// PreachListen Service Worker v2
+// Strategy: Network-first for API/HTML; Cache-first for static assets.
+// HTML is intentionally NOT pre-cached to ensure security headers (CSP etc.) are always fresh.
 
-const CACHE_VERSION = 'preachlisten-v1';
+const CACHE_VERSION = 'preachlisten-v2';
 
 const PRECACHE_ASSETS = [
-  '/',
-  '/index.html',
   '/src/styles/main.css',
   '/src/styles/panes.css',
   '/src/main.js',
@@ -80,6 +79,12 @@ self.addEventListener('fetch', event => {
         })
         .catch(() => caches.match(request))
     );
+    return;
+  }
+
+  // HTML documents: always network-first (never cache — security headers must be fresh)
+  if (request.headers.get('accept')?.includes('text/html') || url.pathname === '/' || url.pathname.endsWith('.html')) {
+    event.respondWith(fetch(request));
     return;
   }
 
