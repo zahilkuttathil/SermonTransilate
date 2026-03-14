@@ -16,7 +16,7 @@
 
 import { getCachedTranslation, cacheTranslations } from '../store/db.js';
 
-const TRANSLATE_ENDPOINT = '/api/translate';
+const TRANSLATE_ENDPOINT = 'https://apim-manna-25cfda35a7aa.azure-api.net/sermon/translate';
 const MAX_BATCH_CHARS    = 4000;   // conservative limit per request
 const MAX_RETRIES        = 2;
 

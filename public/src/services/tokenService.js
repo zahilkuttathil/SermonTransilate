@@ -9,7 +9,7 @@
  * only in the JS heap for the lifetime of the current page.
  */
 
-const TOKEN_ENDPOINT = '/api/speech-token';
+const TOKEN_ENDPOINT = 'https://apim-manna-25cfda35a7aa.azure-api.net/sermon/speech-token';
 
 /** Refresh 1 minute before the 10-minute Azure STS expiry */
 const TOKEN_TTL_MS = 9 * 60 * 1000;
