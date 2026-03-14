@@ -1,8 +1,9 @@
-// PreachListen Service Worker v2
+// PreachListen Service Worker v3
 // Strategy: Network-first for API/HTML; Cache-first for static assets.
 // HTML is intentionally NOT pre-cached to ensure security headers (CSP etc.) are always fresh.
+// On each new SW version activation, all open tabs are reloaded to pick up fresh headers.
 
-const CACHE_VERSION = 'preachlisten-v2';
+const CACHE_VERSION = 'preachlisten-v3';
 
 const PRECACHE_ASSETS = [
   '/src/styles/main.css',
@@ -33,7 +34,7 @@ self.addEventListener('install', event => {
   );
 });
 
-// ── Activate: remove stale caches ─────────────────────────────────────────
+// ── Activate: remove stale caches, claim clients, then reload them ───────────
 self.addEventListener('activate', event => {
   event.waitUntil(
     caches.keys()
@@ -43,6 +44,8 @@ self.addEventListener('activate', event => {
           .map(key => caches.delete(key))
       ))
       .then(() => self.clients.claim())
+      .then(() => self.clients.matchAll({ type: 'window' }))
+      .then(clients => clients.forEach(client => client.postMessage({ type: 'SW_UPDATED' })))
   );
 });
 
@@ -77,7 +80,7 @@ self.addEventListener('fetch', event => {
           }
           return response;
         })
-        .catch(() => caches.match(request))
+        .catch(() => caches.match(request).then(r => r || Response.error()))
     );
     return;
   }

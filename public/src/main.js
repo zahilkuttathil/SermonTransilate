@@ -125,6 +125,11 @@ function _registerSW() {
   navigator.serviceWorker.register('/sw.js')
     .then(reg => console.info('[SW] Registered, scope:', reg.scope))
     .catch(err => console.warn('[SW] Registration failed:', err));
+
+  // When a new SW activates it posts SW_UPDATED — reload to get fresh HTTP headers (CSP etc.)
+  navigator.serviceWorker.addEventListener('message', event => {
+    if (event.data?.type === 'SW_UPDATED') window.location.reload();
+  });
 }
 
 // ── History Modal ─────────────────────────────────────────────────────────────
