@@ -1,9 +1,9 @@
-// PreachListen Service Worker v3
+// PreachListen Service Worker v4
 // Strategy: Network-first for API/HTML; Cache-first for static assets.
 // HTML is intentionally NOT pre-cached to ensure security headers (CSP etc.) are always fresh.
 // On each new SW version activation, all open tabs are reloaded to pick up fresh headers.
 
-const CACHE_VERSION = 'preachlisten-v3';
+const CACHE_VERSION = 'preachlisten-v4';
 
 const PRECACHE_ASSETS = [
   '/src/styles/main.css',
@@ -69,21 +69,9 @@ self.addEventListener('fetch', event => {
     return;
   }
 
-  // External CDN scripts (Speech SDK, Dexie): network-first, cache fallback
-  if (!url.hostname.includes(self.location.hostname)) {
-    event.respondWith(
-      fetch(request)
-        .then(response => {
-          if (response.ok) {
-            const clone = response.clone();
-            caches.open(CACHE_VERSION).then(cache => cache.put(request, clone));
-          }
-          return response;
-        })
-        .catch(() => caches.match(request).then(r => r || Response.error()))
-    );
-    return;
-  }
+  // Never intercept cross-origin requests (CDNs, external APIs).
+  // Let the browser handle them directly under document CSP.
+  if (url.origin !== self.location.origin) return;
 
   // HTML documents: always network-first (never cache — security headers must be fresh)
   if (request.headers.get('accept')?.includes('text/html') || url.pathname === '/' || url.pathname.endsWith('.html')) {
