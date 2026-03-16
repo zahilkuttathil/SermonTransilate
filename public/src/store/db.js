@@ -13,7 +13,11 @@
  */
 
 // Dexie is loaded as a UMD script that sets window.Dexie
+console.log('[DIAG] db.js evaluating — window.Dexie:', typeof window.Dexie);
 const Dexie = window.Dexie;
+if (!Dexie) {
+  console.error('[DIAG] FATAL: window.Dexie is undefined. Dexie CDN script did not load. DB will not work.');
+}
 
 const db = new Dexie('preachlisten_db');
 

@@ -31,18 +31,23 @@ export function initControls({ onTranslateToggle }) {
 
   // ── Record button ────────────────────────────────────────────────────────
   btnRecord.addEventListener('click', async () => {
+    console.log('[DIAG] Record button clicked, state:', _recordState);
     if (_recordState === 'idle' || _recordState === 'stopped') {
       await _startRecording();
     } else if (_recordState === 'recording') {
       _stopRecording();
+    } else {
+      console.log('[DIAG] Click ignored — state is', _recordState);
     }
-    // Ignore clicks while connecting / stopping
   });
 
   async function _startRecording() {
+    console.log('[DIAG] _startRecording() called');
+    console.log('[DIAG] window.SpeechSDK available:', typeof window.SpeechSDK);
     _setRecordState('connecting');
     eventBus.emit('app:connecting');
     try {
+      console.log('[DIAG] calling startRecognition()...');
       await startRecognition();
       // State updates via recognition:started event
     } catch (err) {
@@ -62,6 +67,7 @@ export function initControls({ onTranslateToggle }) {
 
   // ── Translate button ─────────────────────────────────────────────────────
   btnTranslate.addEventListener('click', () => {
+    console.log('[DIAG] Translate button clicked, translateOn will be:', !_translateOn);
     _translateOn = !_translateOn;
     btnTranslate.setAttribute('aria-pressed', String(_translateOn));
     btnTranslate.classList.toggle('btn--translate-active', _translateOn);

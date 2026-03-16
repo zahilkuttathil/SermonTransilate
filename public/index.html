@@ -16,10 +16,30 @@
   <link rel="stylesheet" href="/src/styles/main.css" />
   <link rel="stylesheet" href="/src/styles/panes.css" />
 
+  <!-- ── Diagnostic bootstrap (runs before any module) ────────────────── -->
+  <script>
+    console.log('[DIAG] index.html inline script running — JS is executing');
+    window.addEventListener('error', function(e) {
+      console.error('[DIAG] Uncaught error:', e.message, 'in', e.filename, 'line', e.lineno, e.error);
+    });
+    window.addEventListener('unhandledrejection', function(e) {
+      console.error('[DIAG] Unhandled promise rejection:', e.reason);
+    });
+    document.addEventListener('DOMContentLoaded', function() {
+      console.log('[DIAG] DOMContentLoaded fired');
+      console.log('[DIAG] window.Dexie:', typeof window.Dexie);
+      console.log('[DIAG] window.SpeechSDK:', typeof window.SpeechSDK);
+    });
+  </script>
+
   <!-- Dexie.js UMD — sets window.Dexie -->
-  <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.js"></script>
+  <script src="https://unpkg.com/dexie@3.2.4/dist/dexie.js"
+          onerror="console.error('[DIAG] FAILED to load Dexie from unpkg — window.Dexie will be undefined')"
+          onload="console.log('[DIAG] Dexie loaded OK, version:', window.Dexie && window.Dexie.semVer)"></script>
   <!-- Azure Cognitive Services Speech SDK (UMD — sets window.SpeechSDK) -->
-  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"></script>
+  <script src="https://aka.ms/csspeech/jsbrowserpackageraw"
+          onerror="console.error('[DIAG] FAILED to load SpeechSDK from aka.ms — window.SpeechSDK will be undefined')"
+          onload="console.log('[DIAG] SpeechSDK loaded OK')"></script>
 </head>
 <body>
   <div class="app-layout" id="app">

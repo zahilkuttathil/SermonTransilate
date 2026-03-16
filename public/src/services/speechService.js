@@ -15,7 +15,11 @@ import { eventBus }                  from '../utils/eventBus.js';
 import { getToken, invalidateToken } from './tokenService.js';
 
 // Azure Speech SDK — loaded as UMD script (sets window.SpeechSDK)
+console.log('[DIAG] speechService.js evaluating — window.SpeechSDK:', typeof window.SpeechSDK);
 const SDK = window.SpeechSDK;
+if (!SDK) {
+  console.error('[DIAG] FATAL: window.SpeechSDK is undefined. Speech SDK CDN script did not load. Recording will not work.');
+}
 
 let _recognizer     = null;
 let _tokenRefreshId = null;   // setInterval handle

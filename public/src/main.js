@@ -37,34 +37,48 @@ let _segmentTotal = 0;   // count of segments persisted in this session
 // ── Boot ─────────────────────────────────────────────────────────────────────
 
 (async function boot() {
+  console.log('[DIAG] boot() start');
+
   // 1. Register Service Worker
   _registerSW();
+  console.log('[DIAG] step 1: SW registered');
 
   // 2. Prune old sessions (> 30 days) — do not block UI
   pruneOldSessions(30).catch(err =>
     console.warn('[main] pruneOldSessions:', err)
   );
+  console.log('[DIAG] step 2: pruneOldSessions queued');
 
   // 3. Create a fresh session for this page load
   try {
+    console.log('[DIAG] step 3: creating session...');
     _sessionId = await createSession();
+    console.log('[DIAG] step 3: session created, id =', _sessionId);
   } catch (err) {
     console.error('[main] Could not create session:', err);
+    console.error('[DIAG] step 3 FAILED — Dexie likely unavailable:', err);
     eventBus.emit('app:error', { message: 'Storage unavailable. Try refreshing.' });
     return;
   }
 
   const targetLang  = getSelectedLangCode()  ?? 'en';
   const targetLabel = getSelectedLangLabel() ?? 'English';
+  console.log('[DIAG] step 3b: targetLang =', targetLang, 'targetLabel =', targetLabel);
 
   // 4. Initialise UI modules
   //    (their eventBus handlers are registered inside these calls)
+  console.log('[DIAG] step 4: initialising UI modules...');
   initToolbar();
+  console.log('[DIAG] step 4a: toolbar inited');
   initLangPicker();
+  console.log('[DIAG] step 4b: langPicker inited');
   initTranscriptPane(_sessionId);
+  console.log('[DIAG] step 4c: transcriptPane inited');
   initTranslationPane(_sessionId, targetLang, targetLabel);
+  console.log('[DIAG] step 4d: translationPane inited');
   initControls({
     onTranslateToggle: async (on) => {
+      console.log('[DIAG] translate toggle:', on);
       if (on) {
         await showTranslationPane(_segmentTotal);
       } else {
@@ -72,6 +86,7 @@ let _segmentTotal = 0;   // count of segments persisted in this session
       }
     },
   });
+  console.log('[DIAG] step 4e: controls inited — button listeners now attached');
 
   // 5a. Intercept raw speech events — persist to DB, then emit enriched transcript:final
   eventBus.on('speech:recognized', async (data) => {
