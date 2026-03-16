@@ -30,7 +30,9 @@ export let isRecognizing = false;
 
 /**
  * Start continuous speech recognition.
- * Automatically detects the spoken language from 150+ candidates.
+ * Auto-detects spoken language from a fixed candidate list (ml-IN, en-US, hi-IN, ta-IN).
+ * Explicit candidates are required for all Speech resource tiers; fromOpenRange() only
+ * works on S0 and causes websocket 1007 otherwise.
  *
  * @throws {Error} if the Speech SDK is not loaded or microphone is denied
  */
@@ -49,8 +51,15 @@ export async function startRecognition() {
     SDK.PropertyId.SpeechServiceConnection_EndSilenceTimeoutMs, '1200'
   );
 
-  // Auto Language Identification — open-range (no fixed candidate list required with S0+)
-  const autoDetect = SDK.AutoDetectSourceLanguageConfig.fromOpenRange();
+  // Auto Language Identification — up to 4 candidate locales (works on all tiers).
+  // fromOpenRange() requires S0 tier and leaves targetLanguages empty on F0/standard,
+  // causing websocket error 1007 "targetLanguages cannot be empty".
+  const autoDetect = SDK.AutoDetectSourceLanguageConfig.fromLanguages([
+    'ml-IN', // Malayalam
+    'en-US', // English
+    'hi-IN', // Hindi
+    'ta-IN', // Tamil
+  ]);
 
   // Default microphone input
   const audioConfig = SDK.AudioConfig.fromDefaultMicrophoneInput();
